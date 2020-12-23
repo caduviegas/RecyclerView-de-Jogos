@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">RecycleView2</string>
+    <string name="nome_do_jogo">Nome do Jogo</string>
+    <string name="produtora_do_jogo">Produtora do Jogo</string>
+    <string name="console">Console:</string>
+    <string name="nota_do_jogo">Nota do Jogo</string>
+    <string name="zerado">Zerado</string>
+
+    <string-array name="consoles">
+        <item>Super Nitendo</item>
+        <item>Mega Drive</item>
+        <item>Sega Saturn</item>
+        <item>Atari Jaguar</item>
+        <item>PlayStation 4</item>
+        <item>Xbox-One</item>
+    </string-array>
 </resources>

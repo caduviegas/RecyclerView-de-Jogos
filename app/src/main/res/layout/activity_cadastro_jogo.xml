@@ -32,4 +32,103 @@
 
     </RelativeLayout>
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/rlFotoDoJogo"
+        android:padding="16dp">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilNomeDoJogo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent">
+
+            <EditText
+                android:id="@+id/editTextNomeDoJogo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/nome_do_jogo"
+                android:inputType="textCapWords"/>
+
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilProdutoraDoJogo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/tilNomeDoJogo"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="8dp">
+
+            <EditText
+                android:id="@+id/editTextProdutoraDoJogo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/produtora_do_jogo"
+                android:inputType="textCapWords"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/textViewConsole"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/console"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tilProdutoraDoJogo"
+            android:layout_marginTop="8dp" 
+            android:textStyle="bold"/>
+        
+        <Spinner
+            android:id="@+id/spinnerConsole"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/textViewConsole"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="8dp"
+            android:padding="8dp"
+            android:entries="@array/consoles"
+            style="@style/Widget.AppCompat.Spinner.Underlined"/>
+
+        <TextView
+            android:id="@+id/textViewNotaDoJogo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/nota_do_jogo"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinnerConsole"
+            android:layout_marginTop="8dp"
+            android:textStyle="bold"/>
+
+        <RatingBar
+            android:id="@+id/ratingBarNotaDoJogo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:isIndicator="false"
+            android:numStars="5"
+            android:rating="3.5"
+            android:stepSize="0.5"
+            app:layout_constraintTop_toBottomOf="@+id/textViewNotaDoJogo"
+            app:layout_constraintRight_toRightOf="parent"
+            style="?android:attr/ratingBarStyleIndicator"/>
+
+        <CheckBox
+            android:id="@+id/checkBoxZerado"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/zerado"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="@id/ratingBarNotaDoJogo"
+            app:layout_constraintLeft_toLeftOf="parent"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
