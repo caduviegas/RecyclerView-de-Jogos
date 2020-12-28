@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.Button
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.innaval.recycleview2.R
 import com.innaval.recycleview2.adapter.JogosAdapter
 import com.innaval.recycleview2.datasource.DataSource
@@ -17,8 +18,16 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         setContentView(R.layout.activity_main)
 
         iniciarRecyclerView()
-        findViewById<Button>(R.id.buttonCadastrarJogo).setOnClickListener(this)
 
+        insertToolbar()
+
+        findViewById<FloatingActionButton>(R.id.buttonCadastrarJogo).setOnClickListener(this)
+
+    }
+
+    private fun insertToolbar() {
+        setSupportActionBar(findViewById(R.id.toolbar))
+        supportActionBar!!.title = "My Game App"
     }
 
     override fun onClick(v: View?) {
