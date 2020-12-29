@@ -32,7 +32,7 @@ class JogosAdapter(var listaJogos : ArrayList<Jogo>): RecyclerView.Adapter<Jogos
 
     class JogoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         fun bind (jogo:Jogo){
-            itemView.findViewById<TextView>(R.id.textNomeDoJogo).text = jogo.nomeJogo
+            itemView.findViewById<TextView>(R.id.textNomeDoJogo).text = jogo.titulo
             itemView.findViewById<TextView>(R.id.textConsole).text  = jogo.console
             itemView.findViewById<RatingBar>(R.id.notaJogo).rating = jogo.notaJogo
         }

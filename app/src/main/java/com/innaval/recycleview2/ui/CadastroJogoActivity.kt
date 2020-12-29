@@ -4,8 +4,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
+import android.widget.*
+import androidx.appcompat.app.AlertDialog
+import com.google.android.material.textfield.TextInputLayout
 import com.innaval.recycleview2.R
+import com.innaval.recycleview2.model.Jogo
+import com.innaval.recycleview2.repository.jogoRepository
 
 class CadastroJogoActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,15 +37,73 @@ class CadastroJogoActivity : AppCompatActivity() {
 
         when(item.itemId){
             R.id.menu_cancelar -> {
-                Toast.makeText(this,"Cancelar", Toast.LENGTH_SHORT).show()
+               alert()
             }
             R.id.menu_salvar -> {
-                Toast.makeText(this,"Salvar", Toast.LENGTH_SHORT).show()
+                if(validarFormulario()){
+                    salvarJogo()
+                }
             } else -> {
                 onBackPressed()
             }
         }
 
         return true
+    }
+
+    private fun salvarJogo() {
+        // Criar um Objeto Jogo
+        val jogo = Jogo (
+                titulo = findViewById<EditText>(R.id.editTextNomeDoJogo).text.toString(),
+                produtora = findViewById<EditText>(R.id.editTextProdutoraDoJogo).text.toString(),
+                notaJogo = findViewById<RatingBar>(R.id.ratingBarNotaDoJogo).rating,
+                console = findViewById<Spinner>(R.id.spinnerConsole).selectedItem.toString(),
+                zerado = findViewById<CheckBox>(R.id.checkBoxZerado).isChecked
+        )
+
+        // Criar uma instância do repositorio
+        val repo = jogoRepository(this)
+        val id = repo.save(jogo)
+        print("Registro Criado**********: $id")
+    }
+
+    private fun validarFormulario(): Boolean {
+
+        var valida = true
+        if(findViewById<EditText>(R.id.editTextNomeDoJogo).length() < 3){
+            findViewById<TextInputLayout>(R.id.tilNomeDoJogo).isErrorEnabled = true
+            findViewById<TextInputLayout>(R.id.tilNomeDoJogo).error = "Titulo do jogo é Obrigatório!"
+            valida = false
+        } else {
+            findViewById<TextInputLayout>(R.id.tilNomeDoJogo).isErrorEnabled = false
+            findViewById<TextInputLayout>(R.id.tilNomeDoJogo).error = null
+        }
+
+        if(findViewById<EditText>(R.id.editTextProdutoraDoJogo).length() < 3){
+            findViewById<TextInputLayout>(R.id.tilProdutoraDoJogo).isErrorEnabled = true
+            findViewById<TextInputLayout>(R.id.tilProdutoraDoJogo).error = "Produtora  do jogo é Obrigatório!"
+            valida = false
+        } else {
+            findViewById<TextInputLayout>(R.id.tilProdutoraDoJogo).isErrorEnabled = false
+            findViewById<TextInputLayout>(R.id.tilProdutoraDoJogo).error = null
+        }
+
+        return valida
+    }
+
+    private fun alert() {
+        var builderDialog = AlertDialog.Builder(this)
+        builderDialog.setTitle("Cancelar Cadasstro")
+        builderDialog.setMessage("Tem Certeza que Deseja Cancelar o Cadastro do seu Jogo?")
+        builderDialog.setIcon(R.drawable.ic_baseline_help_red_24)
+
+        builderDialog.setPositiveButton("Sim"){_, _ ->
+            onBackPressed()
+
+        }
+        builderDialog.setNegativeButton("Não") { _, _ ->
+            findViewById<EditText>(R.id.editTextNomeDoJogo).requestFocus()
+        }
+        builderDialog.show()
     }
 }

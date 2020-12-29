@@ -4,13 +4,12 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.innaval.recycleview2.R
 import com.innaval.recycleview2.adapter.JogosAdapter
-import com.innaval.recycleview2.datasource.DataSource
+import com.innaval.recycleview2.datasource.Datasource
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,8 +38,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun iniciarRecyclerView() {
 
-        findViewById<RecyclerView>(R.id.recyclerViewJogos).layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        findViewById<RecyclerView>(R.id.recyclerViewJogos).adapter = JogosAdapter(DataSource.getJogos())
+        findViewById<RecyclerView>(R.id.recyclerViewJogos).layoutManager = LinearLayoutManager(
+                this,
+                LinearLayoutManager.VERTICAL,
+                false)
+        findViewById<RecyclerView>(R.id.recyclerViewJogos).adapter = JogosAdapter(
+                Datasource.getJogos())
 
     }
 
