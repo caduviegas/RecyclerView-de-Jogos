@@ -10,18 +10,24 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.innaval.recycleview2.R
 import com.innaval.recycleview2.adapter.JogosAdapter
 import com.innaval.recycleview2.datasource.Datasource
+import com.innaval.recycleview2.repository.jogoRepository
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        iniciarRecyclerView()
+
 
         insertToolbar()
 
         findViewById<FloatingActionButton>(R.id.buttonCadastrarJogo).setOnClickListener(this)
 
+    }
+
+    override fun onResume() {
+        iniciarRecyclerView()
+        super.onResume()
     }
 
     private fun insertToolbar() {
@@ -42,8 +48,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 this,
                 LinearLayoutManager.VERTICAL,
                 false)
+
+        val repo = jogoRepository(this)
+
         findViewById<RecyclerView>(R.id.recyclerViewJogos).adapter = JogosAdapter(
-                Datasource.getJogos())
+                repo.getJogos())
 
     }
 

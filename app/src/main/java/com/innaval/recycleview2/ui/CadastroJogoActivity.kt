@@ -64,7 +64,33 @@ class CadastroJogoActivity : AppCompatActivity() {
         // Criar uma instância do repositorio
         val repo = jogoRepository(this)
         val id = repo.save(jogo)
-        print("Registro Criado**********: $id")
+
+
+        // Exibir confirmação de inclusão do Registro
+
+        if(id > 0){
+            val builderDialog = AlertDialog.Builder(this)
+            builderDialog.setTitle("Sucesso!")
+            builderDialog.setMessage("Seu Jogo Foi Gravado com Sucesso!\n\nDeseja Cadastrar Outro Jogo?")
+            builderDialog.setIcon(R.drawable.ic_baseline_done_green24)
+
+            builderDialog.setPositiveButton("Sim"){_,_ ->
+                limparFormulario()
+            }
+
+            builderDialog.setNegativeButton("Não"){_,_ ->
+                onBackPressed()
+            }
+            builderDialog.show()
+        }
+    }
+
+    private fun limparFormulario() {
+        findViewById<EditText>(R.id.editTextNomeDoJogo).setText("")
+        findViewById<EditText>(R.id.editTextProdutoraDoJogo).setText("")
+        findViewById<CheckBox>(R.id.checkBoxZerado).isChecked = false
+        findViewById<EditText>(R.id.editTextNomeDoJogo).requestFocus()
+
     }
 
     private fun validarFormulario(): Boolean {
