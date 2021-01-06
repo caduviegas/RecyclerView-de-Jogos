@@ -1,4 +1,4 @@
-package com.innaval.recycleview2.repository
+ package com.innaval.recycleview2.repository
 
 import android.content.ContentValues
 import android.content.Context
@@ -41,13 +41,25 @@ class jogoRepository(context: Context) {
         //Colocar o banco de dados em modo Leitura
         val db = dbHelper.readableDatabase
 
+        //Definir os campos que serão devolvidos na consulta
+
+        val projection = arrayOf(
+                DatabaseDefinitions.Jogo.Columns.ID,
+                DatabaseDefinitions.Jogo.Columns.TITULO,
+                DatabaseDefinitions.Jogo.Columns.CONSOLE,
+                DatabaseDefinitions.Jogo.Columns.NOTA)
+
+        // Definir a ordem de exibição da lista. Ordenar pelo titulo
+
+        val sortOrder = "${DatabaseDefinitions.Jogo.Columns.TITULO} ASC"
+
         val cursor = db.query(DatabaseDefinitions.Jogo.TABLE_NAME,
+            projection,
             null,
             null,
             null,
             null,
-            null,
-            null)
+            sortOrder)
 
 
         var jogos = ArrayList<Jogo>()
@@ -55,12 +67,11 @@ class jogoRepository(context: Context) {
         if(cursor != null){
             while(cursor.moveToNext()){
                 var jogo = Jogo(
-                    cursor.getInt(cursor.getColumnIndex(DatabaseDefinitions.Jogo.Columns.ID)),
-                    cursor.getString(cursor.getColumnIndex(DatabaseDefinitions.Jogo.Columns.TITULO)),
-                    cursor.getString(cursor.getColumnIndex(DatabaseDefinitions.Jogo.Columns.PRODUTORA)),
-                    cursor.getFloat(cursor.getColumnIndex(DatabaseDefinitions.Jogo.Columns.NOTA)),
-                    cursor.getString(cursor.getColumnIndex(DatabaseDefinitions.Jogo.Columns.CONSOLE)),
-                    cursor.getInt(cursor.getColumnIndex(DatabaseDefinitions.Jogo.Columns.ZERADO)) == 1
+                    id = cursor.getInt(cursor.getColumnIndex(DatabaseDefinitions.Jogo.Columns.ID)),
+                    titulo = cursor.getString(cursor.getColumnIndex(DatabaseDefinitions.Jogo.Columns.TITULO)),
+                    console = cursor.getString(cursor.getColumnIndex(DatabaseDefinitions.Jogo.Columns.CONSOLE)),
+                     notaJogo = cursor.getFloat(cursor.getColumnIndex(DatabaseDefinitions.Jogo.Columns.NOTA)),
+
                 )
                 jogos.add(jogo)
             }
@@ -69,7 +80,53 @@ class jogoRepository(context: Context) {
 
     }
 
-    fun getJogo(id: Int){
+    fun getJogo(id: Int): Jogo {
 
+        //Colocar o banco de dados em modo Leitura
+        val db = dbHelper.readableDatabase
+
+        //Definir os campos que serão devolvidos na consulta
+
+        val projection = arrayOf(
+                DatabaseDefinitions.Jogo.Columns.ID,
+                DatabaseDefinitions.Jogo.Columns.TITULO,
+                DatabaseDefinitions.Jogo.Columns.PRODUTORA,
+                DatabaseDefinitions.Jogo.Columns.NOTA,
+                DatabaseDefinitions.Jogo.Columns.CONSOLE,
+                DatabaseDefinitions.Jogo.Columns.ZERADO
+        )
+
+        //Definir o filtro que vamos utilizar
+        val selection = "${DatabaseDefinitions.Jogo.Columns.ID} = ?"
+
+        // Definir qual é o valor do argumento
+        val selectionArgs = arrayOf(id.toString())
+
+
+
+        val cursor = db.query(DatabaseDefinitions.Jogo.TABLE_NAME,
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                null)
+
+
+        var jogo = Jogo()
+
+        if (cursor != null) {
+            cursor.moveToNext()
+            jogo.id = cursor.getInt(cursor.getColumnIndex(DatabaseDefinitions.Jogo.Columns.ID))
+            jogo.titulo = cursor.getString(cursor.getColumnIndex(DatabaseDefinitions.Jogo.Columns.TITULO))
+            jogo.produtora =  cursor.getString(cursor.getColumnIndex(DatabaseDefinitions.Jogo.Columns.PRODUTORA))
+            jogo.notaJogo = cursor.getFloat(cursor.getColumnIndex(DatabaseDefinitions.Jogo.Columns.NOTA))
+            jogo.console = cursor.getString(cursor.getColumnIndex(DatabaseDefinitions.Jogo.Columns.CONSOLE))
+            jogo.zerado = cursor.getInt(cursor.getColumnIndex(DatabaseDefinitions.Jogo.Columns.ZERADO)) == 1
+
+        }
+
+        println("**********${jogo.titulo}")
+        return jogo
     }
 }

@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.innaval.recycleview2.R
 import com.innaval.recycleview2.adapter.JogosAdapter
+import com.innaval.recycleview2.constants.Constants
 import com.innaval.recycleview2.datasource.Datasource
 import com.innaval.recycleview2.repository.jogoRepository
 
@@ -38,6 +39,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(v: View?) {
         if (v!!.id == R.id.buttonCadastrarJogo) {
             val intent = Intent(this, CadastroJogoActivity::class.java)
+            intent.putExtra("operacao", Constants.OPERACAO_NOVO_CADASTRO)
             startActivity(intent)
         }
     }

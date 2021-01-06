@@ -23,7 +23,7 @@ class CadastroJogoActivity : AppCompatActivity() {
 
     private fun insertToolbar() {
         setSupportActionBar(findViewById(R.id.toolbar))
-        supportActionBar!!.title = "Novo Jogo"
+        supportActionBar!!.title = intent.getStringExtra("operacao")
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
     }
 
