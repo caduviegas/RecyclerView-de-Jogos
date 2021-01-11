@@ -8,17 +8,51 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import com.google.android.material.textfield.TextInputLayout
 import com.innaval.recycleview2.R
+import com.innaval.recycleview2.constants.Constants
 import com.innaval.recycleview2.model.Jogo
 import com.innaval.recycleview2.repository.jogoRepository
 
 class CadastroJogoActivity : AppCompatActivity() {
+
+    private lateinit var adapter: ArrayAdapter<CharSequence>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_cadastro_jogo)
 
+        preencherSpinnerConsole()
+
         insertToolbar()
+
+        if(intent.getStringExtra("operacao") != Constants.OPERACAO_NOVO_CADASTRO){
+            preencherFomulario()
+        }
     }
 
+    private fun preencherSpinnerConsole() {
+        adapter = ArrayAdapter.createFromResource(this, R.array.consoles,android.R.layout.simple_spinner_dropdown_item)
+        findViewById<Spinner>(R.id.spinnerConsole).adapter = adapter
+    }
+
+    private fun preencherFomulario() {
+        var jogo = Jogo()
+        var id = intent.getIntExtra("id", 0)
+
+        val repository = jogoRepository(this)
+
+        jogo = repository.getJogo(id)
+
+        findViewById<EditText>(R.id.editTextNomeDoJogo).setText(jogo.titulo)
+        findViewById<EditText>(R.id.editTextProdutoraDoJogo).setText(jogo.produtora)
+
+
+        //selecionar o console na lista
+        val position = adapter.getPosition(jogo.console)
+        findViewById<Spinner>(R.id.spinnerConsole).setSelection(position)
+
+        findViewById<CheckBox>(R.id.checkBoxZerado).isChecked = jogo.zerado
+        findViewById<RatingBar>(R.id.ratingBarNotaDoJogo).rating = jogo.notaJogo
+    }
 
 
     private fun insertToolbar() {

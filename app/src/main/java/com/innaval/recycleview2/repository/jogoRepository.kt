@@ -32,7 +32,23 @@ class jogoRepository(context: Context) {
 
     }
 
-    fun delete(id: Int){
+    fun delete(id: Int): Int {
+
+        //Colocar o banco de dados em modo escrita
+        val db = dbHelper.writableDatabase
+
+        //Definir a cláusula WHERE da excluir
+        val selection = "${DatabaseDefinitions.Jogo.Columns.ID} = ?"
+
+        // Definir os argumentos que serão usados pela instrução DELETE
+        val selectionArgs = arrayOf(id.toString())
+
+        // Executar o comando de exclusão
+
+        val deletedRows = db.delete(
+                DatabaseDefinitions.Jogo.TABLE_NAME, selection, selectionArgs)
+
+        return deletedRows
 
     }
 
