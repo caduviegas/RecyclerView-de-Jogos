@@ -28,7 +28,34 @@ class jogoRepository(context: Context) {
         val id = db.insert(DatabaseDefinitions.Jogo.TABLE_NAME, null, valores)
         return id.toInt()
     }
-    fun update(jogo:Jogo){
+    fun update(jogo:Jogo): Int {
+        //colocar o banco de dados em modo escrita
+        val db = dbHelper.writableDatabase
+
+        // Criar um mapa com os valores que serão atualizados no banco
+        val valores = ContentValues().apply{
+            put(DatabaseDefinitions.Jogo.Columns.TITULO, jogo.titulo)
+            put(DatabaseDefinitions.Jogo.Columns.PRODUTORA, jogo.produtora)
+            put(DatabaseDefinitions.Jogo.Columns.NOTA, jogo.notaJogo)
+            put(DatabaseDefinitions.Jogo.Columns.CONSOLE, jogo.console)
+            put(DatabaseDefinitions.Jogo.Columns.ZERADO, jogo.zerado)
+        }
+
+       // Criar o critério para a cláusula WHERE
+        val selection = "${DatabaseDefinitions.Jogo.Columns.ID} = ?"
+
+        // Criar um Array com a lista de argumentos que serão utilizados para executar a atualização
+        val selectionArgs = arrayOf(jogo.id.toString())
+
+        // Chamar o método update do sqlite
+        val count = db.update(
+                DatabaseDefinitions.Jogo.TABLE_NAME,
+                valores,
+                selection,
+                selectionArgs
+        )
+
+        return count
 
     }
 

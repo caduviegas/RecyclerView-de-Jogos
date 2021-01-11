@@ -15,6 +15,7 @@ import com.innaval.recycleview2.repository.jogoRepository
 class CadastroJogoActivity : AppCompatActivity() {
 
     private lateinit var adapter: ArrayAdapter<CharSequence>
+    private lateinit var operacao: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,7 +25,10 @@ class CadastroJogoActivity : AppCompatActivity() {
 
         insertToolbar()
 
-        if(intent.getStringExtra("operacao") != Constants.OPERACAO_NOVO_CADASTRO){
+        //Preencher o valor da variável operacao
+        operacao = intent.getStringExtra("operacao").toString()
+
+        if(operacao != Constants.OPERACAO_NOVO_CADASTRO){
             preencherFomulario()
         }
     }
@@ -74,8 +78,10 @@ class CadastroJogoActivity : AppCompatActivity() {
                alert()
             }
             R.id.menu_salvar -> {
-                if(validarFormulario()){
+                if(validarFormulario() && operacao == Constants.OPERACAO_NOVO_CADASTRO){
                     salvarJogo()
+                } else{
+                    atualizarJogo()
                 }
             } else -> {
                 onBackPressed()
@@ -115,6 +121,39 @@ class CadastroJogoActivity : AppCompatActivity() {
             builderDialog.setNegativeButton("Não"){_,_ ->
                 onBackPressed()
             }
+            builderDialog.show()
+        }
+    }
+
+    private fun atualizarJogo() {
+        // Criar um Objeto Jogo
+        val jogo = Jogo (
+                id = intent.getIntExtra("id", 0),
+                titulo = findViewById<EditText>(R.id.editTextNomeDoJogo).text.toString(),
+                produtora = findViewById<EditText>(R.id.editTextProdutoraDoJogo).text.toString(),
+                notaJogo = findViewById<RatingBar>(R.id.ratingBarNotaDoJogo).rating,
+                console = findViewById<Spinner>(R.id.spinnerConsole).selectedItem.toString(),
+                zerado = findViewById<CheckBox>(R.id.checkBoxZerado).isChecked
+        )
+
+        // Criar uma instância do repositorio
+        val repo = jogoRepository(this)
+        val count = repo.save(jogo)
+
+
+        // Exibir confirmação de inclusão do Registro
+
+        if(count > 0){
+            val builderDialog = AlertDialog.Builder(this)
+            builderDialog.setTitle("Sucesso!")
+            builderDialog.setMessage("Seu Jogo Foi Atualizado com Sucesso!")
+            builderDialog.setIcon(R.drawable.ic_baseline_done_green24)
+
+            builderDialog.setPositiveButton("Ok"){_,_ ->
+
+                onBackPressed()
+            }
+
             builderDialog.show()
         }
     }
