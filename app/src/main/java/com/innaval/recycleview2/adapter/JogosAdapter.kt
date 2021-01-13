@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.innaval.recycleview2.R
 import com.innaval.recycleview2.constants.Constants
 import com.innaval.recycleview2.model.Jogo
-import com.innaval.recycleview2.repository.jogoRepository
+import com.innaval.recycleview2.repository.JogoRepository
 import com.innaval.recycleview2.ui.CadastroJogoActivity
 
 
@@ -54,7 +54,7 @@ class JogosAdapter(var listaJogos : ArrayList<Jogo>): RecyclerView.Adapter<Jogos
                         .setTitle("Exclusão")
                         .setMessage("Confirma a exclusão do jogo ${jogo.titulo}")
                         .setPositiveButton("SIM"){dialog, which ->
-                            val repo = jogoRepository(itemView.context)
+                            val repo = JogoRepository(itemView.context)
                             repo.delete(jogo.id)
                             listaJogos.removeAt(position)
                             notifyDataSetChanged()

@@ -13,13 +13,15 @@ class DatabaseHelper(context: Context): SQLiteOpenHelper(
         db.execSQL(CREATE_TABLE_JOGO)
     }
 
-    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
-        TODO("Not yet implemented")
+    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
+        val ALTER_TABLE = "ALter TABLE ${DatabaseDefinitions.Jogo.TABLE_NAME } " +
+                "ADD COLUMN  ${DatabaseDefinitions.Jogo.Columns.IMAGEM} BLOB"
+        db.execSQL(ALTER_TABLE)
     }
 
     companion object {
         private const val DATABASE_NAME = "jogo.db"
-        private const val DATABASE_VERSION = 1
+        private const val DATABASE_VERSION = 2
 
         private const val CREATE_TABLE_JOGO = "CREATE TABLE ${DatabaseDefinitions.Jogo.TABLE_NAME} (" +
                 "${DatabaseDefinitions.Jogo.Columns.ID} INTEGER PRIMARY KEY AUTOINCREMENT," +

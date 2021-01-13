@@ -10,8 +10,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.innaval.recycleview2.R
 import com.innaval.recycleview2.adapter.JogosAdapter
 import com.innaval.recycleview2.constants.Constants
-import com.innaval.recycleview2.datasource.Datasource
-import com.innaval.recycleview2.repository.jogoRepository
+import com.innaval.recycleview2.repository.JogoRepository
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,7 +50,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 LinearLayoutManager.VERTICAL,
                 false)
 
-        val repo = jogoRepository(this)
+        val repo = JogoRepository(this)
 
         findViewById<RecyclerView>(R.id.recyclerViewJogos).adapter = JogosAdapter(
                 repo.getJogos())

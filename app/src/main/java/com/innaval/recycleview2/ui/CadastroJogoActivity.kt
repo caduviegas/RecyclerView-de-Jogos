@@ -1,21 +1,27 @@
 package com.innaval.recycleview2.ui
 
+import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputLayout
 import com.innaval.recycleview2.R
 import com.innaval.recycleview2.constants.Constants
 import com.innaval.recycleview2.model.Jogo
-import com.innaval.recycleview2.repository.jogoRepository
+import com.innaval.recycleview2.repository.JogoRepository
 
-class CadastroJogoActivity : AppCompatActivity() {
+class CadastroJogoActivity : AppCompatActivity(), View.OnClickListener {
 
     private lateinit var adapter: ArrayAdapter<CharSequence>
     private lateinit var operacao: String
+    private var bitmap: Bitmap? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +37,34 @@ class CadastroJogoActivity : AppCompatActivity() {
         if(operacao != Constants.OPERACAO_NOVO_CADASTRO){
             preencherFomulario()
         }
+
+        findViewById<FloatingActionButton>(R.id.buttonAbrirGaleria).setOnClickListener(this)
+
+    }
+
+    override fun onClick(view: View) {
+
+        val id = view.id
+
+        when(id){
+            R.id.buttonAbrirGaleria -> {
+                val intent = Intent(Intent.ACTION_GET_CONTENT)
+                intent.type = "image/*"
+                startActivityForResult(intent, 5000)
+            }
+        }
+
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if(data != null){
+            val inputStream = contentResolver.openInputStream(data.data!!)
+            bitmap = BitmapFactory.decodeStream(inputStream)
+            findViewById<ImageView>(R.id.imageViewFotoDoJogo).scaleType = ImageView.ScaleType.CENTER_CROP
+            findViewById<ImageView>(R.id.imageViewFotoDoJogo).setImageBitmap(bitmap)
+        }
     }
 
     private fun preencherSpinnerConsole() {
@@ -42,9 +76,11 @@ class CadastroJogoActivity : AppCompatActivity() {
         var jogo = Jogo()
         var id = intent.getIntExtra("id", 0)
 
-        val repository = jogoRepository(this)
+        val repository = JogoRepository(this)
 
         jogo = repository.getJogo(id)
+
+
 
         findViewById<EditText>(R.id.editTextNomeDoJogo).setText(jogo.titulo)
         findViewById<EditText>(R.id.editTextProdutoraDoJogo).setText(jogo.produtora)
@@ -56,6 +92,15 @@ class CadastroJogoActivity : AppCompatActivity() {
 
         findViewById<CheckBox>(R.id.checkBoxZerado).isChecked = jogo.zerado
         findViewById<RatingBar>(R.id.ratingBarNotaDoJogo).rating = jogo.notaJogo
+
+
+
+        if(jogo.imagem != null){
+            findViewById<ImageView>(R.id.imageViewFotoDoJogo).scaleType = ImageView.ScaleType.CENTER_CROP
+            findViewById<ImageView>(R.id.imageViewFotoDoJogo).setImageBitmap(jogo.imagem)
+        } else{
+            findViewById<ImageView>(R.id.imageViewFotoDoJogo).setImageResource(R.drawable.ic_baseline_insert_photo_24)
+        }
     }
 
 
@@ -70,6 +115,8 @@ class CadastroJogoActivity : AppCompatActivity() {
         return true
 
     }
+
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
@@ -98,11 +145,12 @@ class CadastroJogoActivity : AppCompatActivity() {
                 produtora = findViewById<EditText>(R.id.editTextProdutoraDoJogo).text.toString(),
                 notaJogo = findViewById<RatingBar>(R.id.ratingBarNotaDoJogo).rating,
                 console = findViewById<Spinner>(R.id.spinnerConsole).selectedItem.toString(),
-                zerado = findViewById<CheckBox>(R.id.checkBoxZerado).isChecked
+                zerado = findViewById<CheckBox>(R.id.checkBoxZerado).isChecked,
+                imagem = bitmap
         )
 
         // Criar uma instância do repositorio
-        val repo = jogoRepository(this)
+        val repo = JogoRepository(this)
         val id = repo.save(jogo)
 
 
@@ -137,7 +185,7 @@ class CadastroJogoActivity : AppCompatActivity() {
         )
 
         // Criar uma instância do repositorio
-        val repo = jogoRepository(this)
+        val repo = JogoRepository(this)
         val count = repo.save(jogo)
 
 
@@ -205,4 +253,6 @@ class CadastroJogoActivity : AppCompatActivity() {
         }
         builderDialog.show()
     }
+
+
 }
